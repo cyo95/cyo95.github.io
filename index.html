@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYOTOOLS.COM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Epilogue:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e6e1;
+    --border-light: #f0ede8;
+    --accent: #1a1a1a;
+    --accent2: #c8773a;
+    --text: #1a1a1a;
+    --muted: #9a9590;
+    --dim: #6b6762;
+    --radius: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Epilogue', sans-serif;
+    min-height: 100vh;
+    font-weight: 400;
+  }
+
+  .wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 28px 60px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 64px 0 48px;
+    animation: fadeDown 0.7s ease both;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .header-left {}
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(42px, 8vw, 72px);
+    letter-spacing: -1px;
+    line-height: 1;
+    color: var(--text);
+  }
+  .tagline {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .header-right {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  #clock-display {
+    font-family: 'DM Mono', monospace;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -0.5px;
+  }
+  #date-display {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  /* ── CTA BUTTONS ── */
+  .cta-section {
+    margin-bottom: 48px;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .cta-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media(max-width:540px){ .cta-row { grid-template-columns: 1fr; } }
+  .cta-btn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    transition: all 0.22s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-btn::after {
+    content: '→';
+    position: absolute;
+    right: 22px;
+    top: 50%;
+    transform: translateY(-50%) translateX(4px);
+    font-size: 16px;
+    color: var(--muted);
+    opacity: 0;
+    transition: all 0.22s ease;
+  }
+  .cta-btn:hover {
+    border-color: var(--text);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+  }
+  .cta-btn:hover::after { opacity: 1; transform: translateY(-50%) translateX(0); }
+  .cta-btn.featured {
+    background: var(--text);
+    border-color: var(--text);
+    color: #fff;
+  }
+  .cta-btn.featured::after { color: rgba(255,255,255,0.5); }
+  .cta-btn.featured:hover { background: #2d2d2d; }
+  .cta-icon-wrap {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: grid; place-items: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.04);
+  }
+  .cta-btn.featured .cta-icon-wrap { background: rgba(255,255,255,0.1); }
+  .cta-info { flex: 1; min-width: 0; }
+  .cta-name {
+    font-weight: 500;
+    font-size: 15px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cta-url {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    display: block;
+    margin-top: 3px;
+  }
+  .cta-btn.featured .cta-url { color: rgba(255,255,255,0.4); }
+
+  /* ── GRID ── */
+  .widgets-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+  @media(max-width:620px){ .widgets-grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.07); }
+  .card.full { grid-column: span 2; }
+  @media(max-width:620px){ .card.full { grid-column: span 1; } }
+
+  /* ── WEATHER ── */
+  .weather-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 6px;
+  }
+  .weather-left { display: flex; align-items: center; gap: 12px; }
+  .weather-icon { font-size: 38px; }
+  .weather-temp {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+  }
+  .weather-feels {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 300;
+    font-family: 'DM Mono', monospace;
+  }
+  .weather-right-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-left: auto;
+  }
+  .wstat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+  }
+  .wstat-icon { font-size: 13px; }
+  .wstat-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .wstat-lbl {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .weather-sub-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    font-size: 11px;
+    color: var(--dim);
+    font-family: 'DM Mono', monospace;
+  }
+  .weather-sub-row span { white-space: nowrap; }
+  .weather-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 10px;
+    font-weight: 300;
+  }
+  .weather-forecast {
+    display: flex;
+    gap: 6px;
+    margin-top: 14px;
+    justify-content: space-between;
+  }
+  .forecast-pill {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+    border-radius: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    font-size: 10px;
+  }
+  .forecast-pill .fp-day { color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 4px; }
+  .forecast-pill .fp-icon { font-size: 15px; }
+  .forecast-pill .fp-temp { color: var(--text); font-weight: 500; margin-top: 3px; }
+
+  /* ── CALENDAR ── */
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .cal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .cal-nav { display: flex; gap: 4px; }
+  .cal-nav button {
+    width: 26px; height: 26px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--dim);
+    font-size: 13px;
+    cursor: pointer;
+    display: grid; place-items: center;
+    transition: all 0.15s;
+  }
+  .cal-nav button:hover { background: var(--text); color: #fff; border-color: var(--text); }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+  .cal-dow {
+    text-align: center;
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    padding: 3px 0 7px;
+    letter-spacing: 0.5px;
+  }
+  .cal-cell {
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    color: var(--dim);
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    transition: all 0.12s;
+  }
+  .cal-cell:hover { background: var(--border-light); color: var(--text); }
+  .cal-cell.today {
+    background: var(--text);
+    color: #fff;
+    font-weight: 700;
+  }
+  .cal-cell.other-month { opacity: 0.22; pointer-events: none; }
+  .cal-cell.selected {
+    background: var(--accent2);
+    color: #fff;
+  }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .search-wrap input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 16px;
+    color: var(--text);
+    font-family: 'Epilogue', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-weight: 300;
+  }
+  .search-wrap input:focus { border-color: var(--text); }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-go {
+    padding: 11px 18px;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .search-go:hover { background: #333; }
+  .engines {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .eng {
+    padding: 5px 11px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .eng:hover { border-color: var(--dim); color: var(--text); }
+  .eng.active { border-color: var(--text); color: var(--text); background: var(--bg); }
+
+  /* ── COUNTDOWN ── */
+  .cd-inputs {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .cd-inputs input {
+    flex: 1;
+    min-width: 100px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'Epilogue', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-weight: 300;
+  }
+  .cd-inputs input[type="date"] { font-family: 'DM Mono', monospace; color-scheme: light; }
+  .cd-inputs input:focus { border-color: var(--text); }
+  .cd-inputs input::placeholder { color: var(--muted); }
+  .cd-inputs button {
+    padding: 10px 16px;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .cd-inputs button:hover { background: #333; }
+  #countdown-result {
+    margin-top: 14px;
+    min-height: 24px;
+  }
+  #countdown-result .cd-days {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1;
+  }
+  #countdown-result .cd-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 300;
+  }
+
+  /* ── CLIPBOARD ── */
+  .clip-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+  .clip-row { display: flex; gap: 8px; align-items: center; }
+  .clip-row input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .clip-row input:focus { border-color: var(--text); }
+  .clip-row input::placeholder { color: var(--muted); }
+  .copy-btn {
+    width: 34px; height: 34px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    display: grid; place-items: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { background: var(--text); color: #fff; border-color: var(--text); }
+  .copy-btn.ok { background: #e8f5e9; color: #2e7d32; border-color: #a5d6a7; }
+
+  /* ── WEEK STRIP ── */
+  .week-strip {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+    justify-content: space-between;
+  }
+  .wd {
+    flex: 1;
+    text-align: center;
+    padding: 10px 4px;
+    border-radius: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    font-size: 10px;
+  }
+  .wd.today { background: var(--text); border-color: var(--text); }
+  .wd .wd-name { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 9px; margin-bottom: 5px; }
+  .wd .wd-num { color: var(--dim); font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; }
+  .wd.today .wd-name, .wd.today .wd-num { color: #fff; }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    animation: fadeUp 0.7s 0.4s ease both;
+  }
+  footer span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .status-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4caf50;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+    vertical-align: middle;
+  }
+
+  /* ── ANIMS ── */
+  @keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:none; } }
+  @keyframes fadeUp   { from { opacity:0; transform:translateY(16px);  } to { opacity:1; transform:none; } }
+  @keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <div class="eyebrow">Panel de inicio · Barcelona</div>
+      <h1>CYOTOOLS.COM</h1>
+      <p class="tagline">Tu espacio de herramientas</p>
+    </div>
+    <div class="header-right">
+      <div id="clock-display">--:--:--</div>
+      <div id="date-display">Cargando...</div>
+    </div>
+  </header>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="section-label">Acceso rápido</div>
+    <div class="cta-row">
+      <a href="https://cyotools.com/docu" class="cta-btn featured">
+        <div class="cta-icon-wrap">📄</div>
+        <div class="cta-info">
+          <span class="cta-name">Generador de Documentos</span>
+          <span class="cta-url">cyotools.com/docu</span>
+        </div>
+      </a>
+      <a href="https://cyotools.com/inicio" class="cta-btn">
+        <div class="cta-icon-wrap">🚀</div>
+        <div class="cta-info">
+          <span class="cta-name">Plataforma de Inicio</span>
+          <span class="cta-url">cyotools.com/inicio</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- WIDGETS -->
+  <div class="widgets-grid">
+
+    <!-- WEATHER -->
+    <div class="card">
+      <div class="section-label">Tiempo · Barcelona</div>
+      <div class="weather-main">
+        <div class="weather-left">
+          <div class="weather-icon">☀️</div>
+          <div>
+            <div class="weather-temp">28°C</div>
+            <div class="weather-feels">Sensación 27°C</div>
+          </div>
+        </div>
+        <div class="weather-right-stats">
+          <div class="wstat"><span class="wstat-icon">💧</span><span class="wstat-val">55%</span><span class="wstat-lbl">Humedad</span></div>
+          <div class="wstat"><span class="wstat-icon">💨</span><span class="wstat-val">14 km/h</span><span class="wstat-lbl">Viento NE</span></div>
+          <div class="wstat"><span class="wstat-icon">🌅</span><span class="wstat-val">6:18</span><span class="wstat-lbl">Amanecer</span></div>
+          <div class="wstat"><span class="wstat-icon">🌇</span><span class="wstat-val">21:24</span><span class="wstat-lbl">Atardecer</span></div>
+        </div>
+      </div>
+      <div class="weather-sub-row">
+        <span>☀️ Soleado · Despejado</span>
+        <span>UV 7 · Alto</span>
+        <span>Lluvia 5%</span>
+        <span>Vis. 10 km</span>
+      </div>
+      <div class="weather-forecast">
+        <div class="forecast-pill"><div class="fp-day">Vie</div><div class="fp-icon">☀️</div><div class="fp-temp">28°</div></div>
+        <div class="forecast-pill"><div class="fp-day">Sáb</div><div class="fp-icon">🌤️</div><div class="fp-temp">25°</div></div>
+        <div class="forecast-pill"><div class="fp-day">Dom</div><div class="fp-icon">⛅</div><div class="fp-temp">26°</div></div>
+        <div class="forecast-pill"><div class="fp-day">Lun</div><div class="fp-icon">⛅</div><div class="fp-temp">26°</div></div>
+        <div class="forecast-pill"><div class="fp-day">Mar</div><div class="fp-icon">🌤️</div><div class="fp-temp">27°</div></div>
+      </div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="card">
+      <div class="cal-header">
+        <div class="cal-title" id="cal-title"></div>
+        <div class="cal-nav">
+          <button onclick="calNav(-1)">‹</button>
+          <button onclick="calNav(0)">·</button>
+          <button onclick="calNav(1)">›</button>
+        </div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="card full">
+      <div class="section-label">Búsqueda rápida</div>
+      <div class="search-wrap">
+        <input type="text" id="search-input" placeholder="Buscar en la web..." />
+        <button class="search-go" onclick="doSearch()">Buscar →</button>
+      </div>
+      <div class="engines">
+        <button class="eng active" data-engine="google"     onclick="setEng(this)">Google</button>
+        <button class="eng"        data-engine="duckduckgo" onclick="setEng(this)">DuckDuckGo</button>
+        <button class="eng"        data-engine="bing"       onclick="setEng(this)">Bing</button>
+        <button class="eng"        data-engine="youtube"    onclick="setEng(this)">YouTube</button>
+        <button class="eng"        data-engine="maps"       onclick="setEng(this)">Maps</button>
+        <button class="eng"        data-engine="wikipedia"  onclick="setEng(this)">Wikipedia</button>
+      </div>
+    </div>
+
+    <!-- WEEK -->
+    <div class="card">
+      <div class="section-label">Semana actual</div>
+      <div class="week-strip" id="week-strip"></div>
+    </div>
+
+    <!-- COUNTDOWN -->
+    <div class="card">
+      <div class="section-label">Cuenta atrás</div>
+      <div class="cd-inputs">
+        <input type="text"  id="cd-label" placeholder="Nombre del evento" />
+        <input type="date"  id="cd-date" />
+        <button onclick="setCD()">→</button>
+      </div>
+      <div id="countdown-result">
+        <span style="font-size:12px;color:var(--muted);font-weight:300">Selecciona una fecha…</span>
+      </div>
+    </div>
+
+    <!-- CLIPBOARD -->
+    <div class="card full">
+      <div class="section-label">Portapapeles rápido</div>
+      <div class="clip-list">
+        <div class="clip-row"><input type="text" id="c1" placeholder="Texto frecuente 1…"/><button class="copy-btn" onclick="doCopy('c1',this)">⎘</button></div>
+        <div class="clip-row"><input type="text" id="c2" placeholder="Texto frecuente 2…"/><button class="copy-btn" onclick="doCopy('c2',this)">⎘</button></div>
+        <div class="clip-row"><input type="text" id="c3" placeholder="Texto frecuente 3…"/><button class="copy-btn" onclick="doCopy('c3',this)">⎘</button></div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <footer>
+    <span><span class="status-dot"></span>Todos los servicios operativos</span>
+    <span id="uptime">Sesión: 00:00:00</span>
+    <span>CYOTOOLS.COM · Barcelona</span>
+  </footer>
+</div>
+
+<script>
+// CLOCK
+function tick() {
+  const n = new Date();
+  const pad = v => String(v).padStart(2,'0');
+  document.getElementById('clock-display').textContent =
+    `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  document.getElementById('date-display').textContent =
+    `${days[n.getDay()]} ${n.getDate()} de ${months[n.getMonth()]} de ${n.getFullYear()}`;
+}
+setInterval(tick, 1000); tick();
+
+// WEEK
+(function(){
+  const now = new Date();
+  const dow = (now.getDay()+6)%7;
+  const mon = new Date(now); mon.setDate(now.getDate()-dow);
+  const names = ['L','M','X','J','V','S','D'];
+  const strip = document.getElementById('week-strip');
+  for(let i=0;i<7;i++){
+    const d = new Date(mon); d.setDate(mon.getDate()+i);
+    const isToday = d.toDateString()===now.toDateString();
+    strip.innerHTML += `<div class="wd${isToday?' today':''}">
+      <div class="wd-name">${names[i]}</div>
+      <div class="wd-num">${d.getDate()}</div>
+    </div>`;
+  }
+})();
+
+// CALENDAR
+let cy, cm;
+const TODAY = new Date();
+cy = TODAY.getFullYear(); cm = TODAY.getMonth();
+const MN = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+let selCell = null;
+function buildCal() {
+  document.getElementById('cal-title').textContent = MN[cm]+' '+cy;
+  const g = document.getElementById('cal-grid'); g.innerHTML='';
+  ['L','M','X','J','V','S','D'].forEach(d=>{
+    const el=document.createElement('div'); el.className='cal-dow'; el.textContent=d; g.appendChild(el);
+  });
+  const first = new Date(cy,cm,1);
+  const startDow = (first.getDay()+6)%7;
+  const dim = new Date(cy,cm+1,0).getDate();
+  const prev = new Date(cy,cm,0).getDate();
+  const cells=[];
+  for(let i=startDow-1;i>=0;i--) cells.push({d:prev-i,cur:false});
+  for(let i=1;i<=dim;i++) cells.push({d:i,cur:true});
+  while(cells.length%7!==0) cells.push({d:cells.length-dim-startDow+1,cur:false});
+  cells.forEach(c=>{
+    const el=document.createElement('div');
+    el.className='cal-cell'+(c.cur?'':' other-month');
+    const isT=c.cur&&c.d===TODAY.getDate()&&cm===TODAY.getMonth()&&cy===TODAY.getFullYear();
+    if(isT) el.classList.add('today');
+    el.textContent=c.d;
+    el.addEventListener('click',function(){
+      if(!c.cur) return;
+      if(selCell) selCell.classList.remove('selected');
+      if(!isT){this.classList.add('selected');selCell=this;}
+    });
+    g.appendChild(el);
+  });
+}
+function calNav(d){ if(d===0){cy=TODAY.getFullYear();cm=TODAY.getMonth();}else{cm+=d;if(cm<0){cm=11;cy--;}if(cm>11){cm=0;cy++;}} buildCal(); }
+buildCal();
+
+// SEARCH
+let eng='google';
+const ENGINES={
+  google:q=>`https://www.google.com/search?q=${encodeURIComponent(q)}`,
+  duckduckgo:q=>`https://duckduckgo.com/?q=${encodeURIComponent(q)}`,
+  bing:q=>`https://www.bing.com/search?q=${encodeURIComponent(q)}`,
+  youtube:q=>`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,
+  maps:q=>`https://www.google.com/maps/search/${encodeURIComponent(q)}`,
+  wikipedia:q=>`https://es.wikipedia.org/w/index.php?search=${encodeURIComponent(q)}`
+};
+function setEng(el){ document.querySelectorAll('.eng').forEach(b=>b.classList.remove('active')); el.classList.add('active'); eng=el.dataset.engine; }
+function doSearch(){ const q=document.getElementById('search-input').value.trim(); if(q) window.open(ENGINES[eng](q),'_blank'); }
+document.getElementById('search-input').addEventListener('keydown',e=>{ if(e.key==='Enter') doSearch(); });
+
+// COUNTDOWN
+let cdInt;
+function setCD(){
+  const dv=document.getElementById('cd-date').value;
+  const lbl=document.getElementById('cd-label').value||'Evento';
+  if(!dv) return;
+  clearInterval(cdInt);
+  const run=()=>{
+    const diff=new Date(dv+'T00:00:00')-new Date();
+    const el=document.getElementById('countdown-result');
+    if(diff<0){ el.innerHTML=`<span style="font-size:12px;color:var(--muted)">${lbl} ya pasó.</span>`; clearInterval(cdInt); return; }
+    const days=Math.floor(diff/86400000);
+    const h=Math.floor((diff%86400000)/3600000);
+    const m=Math.floor((diff%3600000)/60000);
+    el.innerHTML=`<div class="cd-days">${days}</div><div class="cd-sub">${lbl} · ${h}h ${String(m).padStart(2,'0')}m restantes</div>`;
+  };
+  run(); cdInt=setInterval(run,60000);
+}
+
+// CLIPBOARD
+['c1','c2','c3'].forEach(id=>{
+  const s=localStorage.getItem('cyo_'+id); if(s) document.getElementById(id).value=s;
+  document.getElementById(id).addEventListener('input',e=>localStorage.setItem('cyo_'+id,e.target.value));
+});
+function doCopy(id,btn){
+  const v=document.getElementById(id).value; if(!v) return;
+  navigator.clipboard.writeText(v).then(()=>{
+    btn.classList.add('ok'); btn.textContent='✓';
+    setTimeout(()=>{ btn.classList.remove('ok'); btn.textContent='⎘'; },1500);
+  });
+}
+
+// UPTIME
+const start=Date.now();
+setInterval(()=>{
+  const s=Math.floor((Date.now()-start)/1000);
+  const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60;
+  const p=v=>String(v).padStart(2,'0');
+  document.getElementById('uptime').textContent=`Sesión: ${p(h)}:${p(m)}:${p(sec)}`;
+},1000);
+</script>
+</body>
+</html>
